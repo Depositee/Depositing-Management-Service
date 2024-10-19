@@ -32,6 +32,7 @@ export class OrderController {
   public createOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const orderData: Order = req.body;
+      orderData.status = 'placed';
       const newOrder: Order = await this.orderService.createOrder(orderData);
 
       res.status(201).json({ data: newOrder, message: 'created' });
