@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { Service } from 'typedi';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { Order } from '@/interfaces/orders.interface';
+import { sendUpdateOrderStatusNotification } from '@/utils/notificationUtils';
 
 @Service()
 export class OrderService {
@@ -82,6 +84,14 @@ export class OrderService {
             `,
             [orderId, depositor_id, depositee_id, package_id, status],
         );
+
+        await sendUpdateOrderStatusNotification(
+            depositor_id, 
+            depositee_id, 
+            package_id, 
+            status
+        );
+        
         return updateOrderData;
     }
 
@@ -114,7 +124,10 @@ export class OrderService {
             [orderId, status],
         );
 
-        return updatedOrder[0];
+        const updatedOrderData = updatedOrder[0];
+
+
+        return updatedOrderData;
     }
 
     public async deleteOrder(orderId: number): Promise<Order[]> {

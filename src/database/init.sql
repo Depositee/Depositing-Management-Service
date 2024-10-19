@@ -15,8 +15,8 @@ CREATE TABLE users(
 DROP TABLE IF EXISTS orders cascade;
 CREATE TABLE orders (
     "id" SERIAL PRIMARY KEY,
-    "depositor_id" INT NOT NULL,
-    "depositee_id" INT NOT NULL,
+    "depositor_id" VARCHAR(48) NOT NULL,
+    "depositee_id" VARCHAR(48),
     "package_id" VARCHAR(48) NOT NULL,
     "status" VARCHAR(20) NOT NULL,
     "created_at" TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc'),
