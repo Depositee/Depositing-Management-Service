@@ -17,7 +17,7 @@ CREATE TABLE orders (
     "id" SERIAL PRIMARY KEY,
     "depositor_id" INT NOT NULL,
     "depositee_id" INT NOT NULL,
-    "package_id" INT NOT NULL,
+    "package_id" VARCHAR(48) NOT NULL,
     "status" VARCHAR(20) NOT NULL,
     "created_at" TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc'),
     "updated_at" TIMESTAMP WITHOUT TIME ZONE

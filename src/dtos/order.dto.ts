@@ -11,9 +11,9 @@ export class CreateOrderDto {
   @IsNotEmpty()
   public depositee_id: number;
 
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  public package_id: number;
+  public package_id: string;
 
   @IsString()
   @IsNotEmpty()
