@@ -1,6 +1,8 @@
 tags:
 - name: users
   description: users API
+- name: orders
+  description: Orders API
 
 paths:
 # [GET] users
@@ -12,6 +14,105 @@ paths:
       responses:
         200:
           description: 'OK'
+        500:
+          description: 'Server Error'
+  # [GET] orders
+  /orders:
+    get:
+      tags:
+      - orders
+      summary: Find All Orders
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+  # [POST] orders
+    post:
+      tags:
+      - orders
+      summary: Create New Order
+      parameters:
+      - name: body
+        in: body
+        description: Order Data
+        required: true
+        schema:
+          $ref: '#/definitions/orders'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] orders/{id}
+  /orders/{id}:
+    get:
+      tags:
+      - orders
+      summary: Find Order By Id
+      parameters:
+      - name: id
+        in: path
+        description: Order Id
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [PUT] orders/{id}
+    put:
+      tags:
+      - orders
+      summary: Update Order By Id
+      parameters:
+      - name: id
+        in: path
+        description: Order Id
+        required: true
+        type: integer
+      - name: body
+        in: body
+        description: Order Data
+        required: true
+        schema:
+          $ref: '#/definitions/orders'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [DELETE] orders/{id}
+    delete:
+      tags:
+      - orders
+      summary: Delete Order By Id
+      parameters:
+      - name: id
+        in: path
+        description: Order Id
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
         500:
           description: 'Server Error'
 
@@ -117,7 +218,26 @@ definitions:
       password:
         type: string
         description: user Password
-
+  orders:
+    type: object
+    required:
+      - depositor_id
+      - depositee_id
+      - package_id
+      - status
+    properties:
+      depositor_id:
+        type: integer
+        description: ID of the depositor user
+      depositee_id:
+        type: integer
+        description: ID of the depositee user
+      package_id:
+        type: integer
+        description: ID of the package being deposited
+      status:
+        type: string
+        description: Status of the order (e.g., pending, completed, canceled)
 schemes:
  - https
  - http
