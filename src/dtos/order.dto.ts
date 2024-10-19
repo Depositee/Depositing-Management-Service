@@ -1,38 +1,34 @@
-import { IsInt, IsString, IsNotEmpty, IsIn } from 'class-validator';
+import { IsString, IsNotEmpty, IsIn, IsOptional } from 'class-validator';
 
-const orderValidStatus = ['placed',"reserved","received", 'completed', 'canceled'];
+const orderValidStatus = ['placed', 'reserved', 'received', 'completed', 'canceled'];
 
 export class CreateOrderDto {
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  public depositor_id: number;
+  public depositor_id: string;
 
-  @IsInt()
-  @IsNotEmpty()
-  public depositee_id: number;
+  @IsString()
+  @IsOptional()
+  public depositee_id?: string;
 
   @IsString()
   @IsNotEmpty()
   public package_id: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsIn(orderValidStatus)
-  public status: string;
 }
 
 export class UpdateOrderDto {
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  public depositor_id: number;
+  public depositor_id: string;
 
-  @IsInt()
-  @IsNotEmpty()
-  public depositee_id: number;
+  @IsString()
+  @IsOptional()
+  public depositee_id?: string;
 
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  public package_id: number;
+  public package_id: string;
 
   @IsString()
   @IsNotEmpty()
