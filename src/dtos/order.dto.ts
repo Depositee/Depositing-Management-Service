@@ -39,3 +39,9 @@ export class UpdateOrderDto {
   @IsIn(orderValidStatus)
   public status: string;
 }
+export class UpdateOrderStatusDto {
+  @IsString()
+  @IsNotEmpty()
+  @IsIn(orderValidStatus)
+  public status: string;
+}

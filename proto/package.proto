@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package package;
+
+service PackageService {
+    rpc GetAll(google.protobuf.Empty) returns (PackageList) {}
+    rpc Get (PackageId) returns (Package) {}
+    rpc Create (Package) returns (Package) {}
+    rpc Update (Package) returns (Package) {}
+    rpc Delete (PackageId) returns (google.protobuf.Empty) {}
+
+}
+
+message Package {
+    string id = 1;
+    string name = 2;
+    int32 description = 3;
+    int32 weight = 4;
+    int32 depositorId = 5;
+    int32 depositeeId = 6;
+    bool isAvailable = 7;
+    bool isReceived = 8;
+}
+
+message PackageId {
+    string id = 1;
+}
+
+message PackageList {
+    repeated Package package = 1;
+}

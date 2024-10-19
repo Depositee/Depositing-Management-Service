@@ -85,6 +85,38 @@ export class OrderService {
         return updateOrderData;
     }
 
+    public async updateOrderStatus(orderId: number, status: string): Promise<Order> {
+        const { rows: findOrder } = await pg.query(
+            `
+            SELECT EXISTS(
+                SELECT
+                    "id"
+                FROM
+                    orders
+                WHERE
+                    "id" = $1
+            )
+            `,
+            [orderId],
+        );
+        if (!findOrder[0].exists) throw new HttpException(409, "Order doesn't exist");
+
+        const { rows: updatedOrder } = await pg.query(
+            `
+            UPDATE
+                orders
+            SET
+                "status" = $2
+            WHERE
+                "id" = $1
+            RETURNING "id", "depositor_id", "depositee_id", "package_id", "status"
+            `,
+            [orderId, status],
+        );
+
+        return updatedOrder[0];
+    }
+
     public async deleteOrder(orderId: number): Promise<Order[]> {
         const { rows: findOrder } = await pg.query(
             `
