@@ -7,3 +7,8 @@ export interface Order {
     created_at?: Date;
     updated_at?: Date;
   }
+
+export interface OrderStatus{
+    id?: number;
+    status: string;
+}

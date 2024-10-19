@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { OrderService } from '@/services/orders.service';
-import { Order } from '@interfaces/orders.interface';
+import { Order, OrderStatus } from '@interfaces/orders.interface';
 
 export class OrderController {
   public orderService = Container.get(OrderService);
@@ -49,6 +49,17 @@ export class OrderController {
       const updatedOrder: Order[] = await this.orderService.updateOrder(orderId, orderData);
 
       res.status(200).json({ data: updatedOrder, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public updateOrderStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const orderId: number = Number(req.params.id);
+      const orderStatus: OrderStatus = req.body;
+      const updatedOrder: Order = await this.orderService.updateOrderStatus(orderId, orderStatus.status);
+
+      res.status(200).json({ data: updatedOrder, message: 'order status updated' });
     } catch (error) {
       next(error);
     }
