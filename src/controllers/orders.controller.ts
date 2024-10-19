@@ -19,7 +19,7 @@ export class OrderController {
   // Get a specific order by ID
   public getOrderById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const orderId: number = Number(req.params.id);
+      const orderId = Number(req.params.id);
       const order: Order = await this.orderService.findOrderById(orderId);
 
       res.status(200).json({ data: order, message: 'findOne' });
@@ -44,7 +44,7 @@ export class OrderController {
   // Update an existing order
   public updateOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const orderId: number = Number(req.params.id);
+      const orderId = Number(req.params.id);
       const orderData: Order = req.body;
       const updatedOrder: Order[] = await this.orderService.updateOrder(orderId, orderData);
 
@@ -55,7 +55,7 @@ export class OrderController {
   };
   public updateOrderStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const orderId: number = Number(req.params.id);
+      const orderId = Number(req.params.id);
       const orderStatus: OrderStatus = req.body;
       const updatedOrder: Order = await this.orderService.updateOrderStatus(orderId, orderStatus.status);
 
@@ -68,7 +68,7 @@ export class OrderController {
   // Delete an order
   public deleteOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const orderId: number = Number(req.params.id);
+      const orderId = Number(req.params.id);
       const deletedOrder: Order[] = await this.orderService.deleteOrder(orderId);
 
       res.status(200).json({ data: deletedOrder, message: 'deleted' });
