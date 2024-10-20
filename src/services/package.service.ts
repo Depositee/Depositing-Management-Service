@@ -69,7 +69,7 @@ export class PackageService {
       name : packageData.name,
       description : packageData.description,
       weight : packageData.weight,
-      depositorId : order.depositor_id,
+      depositorId : order.depositorId,
       isAvailable : true,
       isReceived : false
     }
