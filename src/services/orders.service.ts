@@ -34,7 +34,7 @@ export class OrderService {
     }
 
     public async createOrder(orderData: Order): Promise<Order> {
-        const { depositor_id, depositee_id, package_id, status } = orderData;
+        const { depositorId, depositeeId, package_id, status } = orderData;
         const { rows: createOrderData } = await pg.query(
             `
             INSERT INTO
@@ -47,7 +47,7 @@ export class OrderService {
             VALUES ($1, $2, $3, $4)
             RETURNING "id","depositor_id", "depositee_id", "package_id", "status"
             `,
-            [depositor_id, depositee_id, package_id, status],
+            [depositorId, depositeeId, package_id, status],
         );
         return createOrderData[0];
     }

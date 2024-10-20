@@ -1,16 +1,20 @@
+/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { OrderService } from '@/services/orders.service';
 import { Order, OrderStatus } from '@interfaces/orders.interface';
+import { PackageService } from '@/services/package.service';
+import { Package } from '@/interfaces/packages.interface';
 
 export class OrderController {
   public orderService = Container.get(OrderService);
+  public packageService = Container.get(PackageService);
 
   // Get all orders
   public getOrders = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const allOrders: Order[] = await this.orderService.findAllOrders();
-      res.status(200).json({ data: allOrders, message: 'findAll' });
+      res.status(200).json({ data: allOrders, message: 'findAll'});
     } catch (error) {
       next(error);
     }
@@ -31,9 +35,28 @@ export class OrderController {
   // Create a new order
   public createOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const orderData: Order = req.body;
-      orderData.status = 'placed';
-      const newOrder: Order = await this.orderService.createOrder(orderData);
+      const orderData: Order = {
+        depositorId: req.body.depositor_id,
+        status: 'placed'
+      }
+      const packageData : Package = {
+        name: req.body.package_name,
+        description: req.body.package_description,
+        weight: req.body.package_weight,
+        depositorId: req.body.depositor_id,
+        isAvailable: true,
+        isReceived: false
+      }
+      const newPackage : Package = await this.packageService.createNewPackageFromOrder(orderData,packageData);
+
+      const newOrderData : Order = {
+        ...orderData,
+        depositorId : newPackage.depositorId,
+        package_id : newPackage.id
+      }
+      console.log("newOrderData", newPackage)
+      const newOrder: Order = await this.orderService.createOrder(newOrderData);
+
 
       res.status(201).json({ data: newOrder, message: 'created' });
     } catch (error) {

@@ -18,8 +18,8 @@ message Package {
     string name = 2;
     int32 description = 3;
     int32 weight = 4;
-    int32 depositorId = 5;
-    int32 depositeeId = 6;
+    string depositorId = 5;
+    string depositeeId = 6;
     bool isAvailable = 7;
     bool isReceived = 8;
 }

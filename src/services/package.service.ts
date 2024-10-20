@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/httpException';
 import packageClient from '@/client/packageClient';
 import { Package,PackageId,PackageList } from '@/interfaces/packages.interface';
+import { Order } from '@/interfaces/orders.interface';
 
 @Service()
 export class PackageService {
@@ -60,5 +62,17 @@ export class PackageService {
         resolve();
       });
     });
+  }
+
+  public async createNewPackageFromOrder(order : Order ,packageData : Package): Promise<Package> {
+    const newPackage : Package = {
+      name : packageData.name,
+      description : packageData.description,
+      weight : packageData.weight,
+      depositorId : order.depositor_id,
+      isAvailable : true,
+      isReceived : false
+    }
+    return this.createPackage(newPackage)
   }
 }

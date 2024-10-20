@@ -39,7 +39,7 @@ paths:
         description: Order Data
         required: true
         schema:
-          $ref: '#/definitions/orders'
+          $ref: '#/definitions/CreateOrderDto'
       responses:
         201:
           description: 'Created'
@@ -222,7 +222,6 @@ definitions:
     type: object
     required:
       - depositor_id
-      - depositee_id
       - package_id
       - status
     properties:
@@ -238,6 +237,30 @@ definitions:
       status:
         type: string
         description: Status of the order (e.g., pending, completed, canceled)
+  CreateOrderDto:  # Define the CreateOrderDto schema
+    type: object
+    properties:
+      depositor_id:
+        type: string
+        description: 'ID of the depositor'
+      depositee_id:
+        type: string
+        description: 'ID of the depositee (optional)'
+      package_name:
+        type: string
+        description: 'Name of the package'
+      package_description:
+        type: string
+        description: 'Description of the package'
+      package_weight:
+        type: integer
+        format: int32
+        description: 'Weight of the package'
+    required:
+      - depositor_id
+      - package_name
+      - package_description
+      - package_weight
 schemes:
  - https
  - http
