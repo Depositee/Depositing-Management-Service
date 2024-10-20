@@ -36,14 +36,14 @@ export class OrderController {
   public createOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const orderData: Order = {
-        depositorId: req.body.depositor_id,
+        depositorId: req.body.depositorId,
         status: 'placed'
       }
       const packageData : Package = {
         name: req.body.package_name,
         description: req.body.package_description,
         weight: req.body.package_weight,
-        depositorId: req.body.depositor_id,
+        depositorId: req.body.depositorId,
         isAvailable: true,
         isReceived: false
       }
@@ -54,7 +54,6 @@ export class OrderController {
         depositorId : newPackage.depositorId,
         package_id : newPackage.id
       }
-      console.log("newOrderData", newPackage)
       const newOrder: Order = await this.orderService.createOrder(newOrderData);
 
 

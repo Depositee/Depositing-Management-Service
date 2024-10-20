@@ -5,11 +5,11 @@ const orderValidStatus = ['placed', 'reserved', 'received', 'completed', 'cancel
 export class CreateOrderDto {
   @IsString()
   @IsNotEmpty()
-  public depositor_id: string;
+  public depositorId: string;
 
   @IsString()
   @IsOptional()
-  public depositee_id?: string;
+  public depositeeId?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -27,11 +27,11 @@ export class CreateOrderDto {
 export class UpdateOrderDto {
   @IsString()
   @IsNotEmpty()
-  public depositor_id: string;
+  public depositorId: string;
 
   @IsString()
   @IsOptional()
-  public depositee_id?: string;
+  public depositeeId?: string;
 
   @IsString()
   @IsNotEmpty()
