@@ -75,4 +75,40 @@ export class PackageService {
     }
     return this.createPackage(newPackage)
   }
+  public async updatePackageFromOrder(order : Order ,packageData : Package): Promise<Package> {
+
+    let packageAvailable = true
+    let packageReceived = true
+    let depositeeId = null
+    switch (order.status) {
+      case "placed":
+          break;
+      case "reserved":
+          packageAvailable = false
+          depositeeId = order.depositeeId
+          break;
+      case "received":
+          packageAvailable = false
+          packageReceived = true
+          depositeeId = order.depositeeId
+          break;
+      case "completed":
+        packageAvailable = false
+        packageReceived = true
+        depositeeId = order.depositeeId
+          break;
+      default:
+          return;  
+  }
+    const updatePackage : Package = {
+      name : packageData.name,
+      description : packageData.description,
+      weight : packageData.weight,
+      depositorId : order.depositorId,
+      depositeeId : depositeeId,
+      isAvailable : packageAvailable,
+      isReceived : packageReceived
+    }
+    return this.updatePackage(updatePackage)
+  }
 }
