@@ -69,6 +69,11 @@ export class OrderController {
       const orderId = Number(req.params.id);
       const orderData: Order = req.body;
       const updatedOrder: Order[] = await this.orderService.updateOrder(orderId, orderData);
+      
+      const packageId = orderData.package_id
+      const packageData : Package = await this.packageService.getPackageById(packageId);
+
+      const updatedPackage : Package = await this.packageService.updatePackageFromOrder(orderData,packageData);
 
       res.status(200).json({ data: updatedOrder, message: 'updated' });
     } catch (error) {
