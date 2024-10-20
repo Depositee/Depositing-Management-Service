@@ -101,6 +101,7 @@ export class PackageService {
           return;  
   }
     const updatePackage : Package = {
+      id : packageData.id,
       name : packageData.name,
       description : packageData.description,
       weight : packageData.weight,

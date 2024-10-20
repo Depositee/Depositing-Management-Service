@@ -70,7 +70,7 @@ export class OrderController {
       const orderData: Order = req.body;
       const updatedOrder: Order[] = await this.orderService.updateOrder(orderId, orderData);
       
-      const packageId = orderData.package_id
+      const packageId = updatedOrder[0].package_id;
       const packageData : Package = await this.packageService.getPackageById(packageId);
 
       const updatedPackage : Package = await this.packageService.updatePackageFromOrder(orderData,packageData);
