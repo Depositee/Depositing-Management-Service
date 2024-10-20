@@ -1,10 +1,10 @@
 export interface Package {
-    id: string;            // Unique identifier for the package
+    id?: string;            // Unique identifier for the package
     name: string;          // Name of the package
     description: number;   // Description of the package (consider changing to string if needed)
     weight: number;        // Weight of the package
-    depositorId: number;   // ID of the depositor
-    depositeeId: number;   // ID of the depositee
+    depositorId: string;   // ID of the depositor
+    depositeeId?: string;   // ID of the depositee
     isAvailable: boolean;   // Availability status of the package
     isReceived: boolean;    // Reception status of the package
   }

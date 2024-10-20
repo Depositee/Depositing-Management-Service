@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/httpException';
 import packageClient from '@/client/packageClient';
 import { Package,PackageId,PackageList } from '@/interfaces/packages.interface';
+import { Order } from '@/interfaces/orders.interface';
 
 @Service()
 export class PackageService {
@@ -60,5 +62,54 @@ export class PackageService {
         resolve();
       });
     });
+  }
+
+  public async createNewPackageFromOrder(order : Order ,packageData : Package): Promise<Package> {
+    const newPackage : Package = {
+      name : packageData.name,
+      description : packageData.description,
+      weight : packageData.weight,
+      depositorId : order.depositorId,
+      isAvailable : true,
+      isReceived : false
+    }
+    return this.createPackage(newPackage)
+  }
+  public async updatePackageFromOrder(order : Order ,packageData : Package): Promise<Package> {
+
+    let packageAvailable = true
+    let packageReceived = true
+    let depositeeId = null
+    switch (order.status) {
+      case "placed":
+          break;
+      case "reserved":
+          packageAvailable = false
+          depositeeId = order.depositeeId
+          break;
+      case "received":
+          packageAvailable = false
+          packageReceived = true
+          depositeeId = order.depositeeId
+          break;
+      case "completed":
+        packageAvailable = false
+        packageReceived = true
+        depositeeId = order.depositeeId
+          break;
+      default:
+          return;  
+  }
+    const updatePackage : Package = {
+      id : packageData.id,
+      name : packageData.name,
+      description : packageData.description,
+      weight : packageData.weight,
+      depositorId : order.depositorId,
+      depositeeId : depositeeId,
+      isAvailable : packageAvailable,
+      isReceived : packageReceived
+    }
+    return this.updatePackage(updatePackage)
   }
 }

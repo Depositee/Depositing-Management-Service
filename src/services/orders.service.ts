@@ -34,7 +34,7 @@ export class OrderService {
     }
 
     public async createOrder(orderData: Order): Promise<Order> {
-        const { depositor_id, depositee_id, package_id, status } = orderData;
+        const { depositorId, depositeeId, package_id, status } = orderData;
         const { rows: createOrderData } = await pg.query(
             `
             INSERT INTO
@@ -47,7 +47,7 @@ export class OrderService {
             VALUES ($1, $2, $3, $4)
             RETURNING "id","depositor_id", "depositee_id", "package_id", "status"
             `,
-            [depositor_id, depositee_id, package_id, status],
+            [depositorId, depositeeId, package_id, status],
         );
         return createOrderData[0];
     }
@@ -68,7 +68,7 @@ export class OrderService {
         );
         if (!findOrder[0].exists) throw new HttpException(409, "Order doesn't exist");
 
-        const { depositor_id, depositee_id, package_id, status } = orderData;
+        const { depositorId, depositeeId, package_id, status } = orderData;
         const { rows: updateOrderData } = await pg.query(
             `
             UPDATE
@@ -82,12 +82,12 @@ export class OrderService {
                 "id" = $1
             RETURNING "depositor_id", "depositee_id", "package_id", "status"
             `,
-            [orderId, depositor_id, depositee_id, package_id, status],
+            [orderId, depositorId, depositeeId, package_id, status],
         );
 
         await sendUpdateOrderStatusNotification(
-            depositor_id, 
-            depositee_id, 
+            depositorId, 
+            depositeeId, 
             package_id, 
             status
         );

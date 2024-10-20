@@ -3,8 +3,8 @@ import { NOTIFICATION_SERVICE_API } from "@/config";
 import axios from "axios";
 
 export const sendUpdateOrderStatusNotification = (
-    depositor_id: number, 
-    depositee_id: number, 
+    depositor_id: string, 
+    depositee_id: string, 
     package_id: string, 
     status: string 
 ) => {
@@ -15,16 +15,16 @@ export const sendUpdateOrderStatusNotification = (
             break;
         case "reserved":
             message = `Your order with package ID ${package_id} has been reserved by depositee ID ${depositee_id}.`;
-            sendNotification(depositor_id.toString(), package_id, message);
+            sendNotification(depositor_id, package_id, message);
             break;
         case "received":
             message = `Your order with package ID ${package_id} has been received by the depositee ID ${depositee_id}. please contact to get your packages`;
-            sendNotification(depositor_id.toString(), package_id, message);
+            sendNotification(depositor_id, package_id, message);
             break;
         case "completed":
             message = `Your order with package ID ${package_id} has been completed.`;
-            sendNotification(depositor_id.toString(), package_id, message);
-            sendNotification(depositee_id.toString(), package_id, message);
+            sendNotification(depositor_id, package_id, message);
+            sendNotification(depositee_id, package_id, message);
             break;
         default:
             return;  
