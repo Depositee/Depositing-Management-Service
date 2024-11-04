@@ -1,0 +1,13 @@
+@baseURL = http://localhost:3000
+
+POST {{ baseURL }}/orders
+Content-Type: application/json
+
+{
+    "depositorId": "example@email.com",
+	"package_name": "password",
+    "payment_type":"other",
+    "payment_amount": 1000,
+    "package_description":"description",
+    "package_weight":200
+}

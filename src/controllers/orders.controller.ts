@@ -4,11 +4,13 @@ import { Container } from 'typedi';
 import { OrderService } from '@/services/orders.service';
 import { Order, OrderStatus } from '@interfaces/orders.interface';
 import { PackageService } from '@/services/package.service';
+import { PaymentService } from '@/services/payment.service';
 import { Package } from '@/interfaces/packages.interface';
 
 export class OrderController {
   public orderService = Container.get(OrderService);
   public packageService = Container.get(PackageService);
+  public paymentService = Container.get(PaymentService);
 
   // Get all orders
   public getOrders = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -37,7 +39,9 @@ export class OrderController {
     try {
       const orderData: Order = {
         depositorId: req.body.depositorId,
-        status: 'placed'
+        payment_type: req.body.payment_type,
+        payment_amount: req.body.payment_amount,
+        status: 'placed',
       }
       const packageData : Package = {
         name: req.body.package_name,
@@ -85,6 +89,14 @@ export class OrderController {
       const orderId = Number(req.params.id);
       const orderStatus: OrderStatus = req.body;
       const updatedOrder: Order = await this.orderService.updateOrderStatus(orderId, orderStatus.status);
+      if (updatedOrder.status === 'completed' && updatedOrder.payment_type === 'platform') {
+        await this.paymentService.makePayment({
+          senderId: updatedOrder.depositorId,
+          receiverId: updatedOrder?.depositeeId,
+          amount: updatedOrder.payment_amount,
+          currency: "THB"
+        });
+      }
 
       res.status(200).json({ data: updatedOrder, message: 'order status updated' });
     } catch (error) {
