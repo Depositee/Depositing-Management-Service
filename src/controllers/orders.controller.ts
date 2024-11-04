@@ -90,10 +90,17 @@ export class OrderController {
       const orderStatus: OrderStatus = req.body;
       const updatedOrder: Order = await this.orderService.updateOrderStatus(orderId, orderStatus.status);
       if (updatedOrder.status === 'completed' && updatedOrder.payment_type === 'platform') {
+        console.log(updatedOrder);
+        console.log({
+          senderId: updatedOrder.depositorId,
+          receiverId: updatedOrder?.depositeeId,
+          amount: Number(updatedOrder.payment_amount),
+          currency: "THB"
+        })
         await this.paymentService.makePayment({
           senderId: updatedOrder.depositorId,
           receiverId: updatedOrder?.depositeeId,
-          amount: updatedOrder.payment_amount,
+          amount: Number(updatedOrder.payment_amount),
           currency: "THB"
         });
       }

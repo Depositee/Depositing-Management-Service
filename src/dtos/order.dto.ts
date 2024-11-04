@@ -40,8 +40,8 @@ export class UpdateOrderDto {
   public depositorId: string;
 
   @IsString()
-  @IsOptional()
-  public depositeeId?: string;
+  @IsNotEmpty()
+  public depositeeId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -52,6 +52,7 @@ export class UpdateOrderDto {
   @IsIn(orderValidStatus)
   public status: string;
 }
+
 export class UpdateOrderStatusDto {
   @IsString()
   @IsNotEmpty()
