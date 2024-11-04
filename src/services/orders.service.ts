@@ -34,7 +34,7 @@ export class OrderService {
     }
 
     public async createOrder(orderData: Order): Promise<Order> {
-        const { depositorId, depositeeId, package_id, status } = orderData;
+        const { depositorId, depositeeId, package_id, status,payment_type,payment_amount } = orderData;
         const { rows: createOrderData } = await pg.query(
             `
             INSERT INTO
@@ -42,12 +42,14 @@ export class OrderService {
                     "depositor_id",
                     "depositee_id",
                     "package_id",
-                    "status"
+                    "status",
+                    "payment_type",
+                    "payment_amount"
                 )
-            VALUES ($1, $2, $3, $4)
-            RETURNING "id","depositor_id", "depositee_id", "package_id", "status"
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING "id","depositor_id", "depositee_id", "package_id", "status","payment_type","payment_amount"
             `,
-            [depositorId, depositeeId, package_id, status],
+            [depositorId, depositeeId, package_id, status,payment_type,payment_amount],
         );
         return createOrderData[0];
     }
@@ -119,7 +121,7 @@ export class OrderService {
                 "status" = $2
             WHERE
                 "id" = $1
-            RETURNING "id", "depositor_id", "depositee_id", "package_id", "status"
+            RETURNING "id", "depositor_id", "depositee_id", "package_id", "status","payment_type","payment_amount"
             `,
             [orderId, status],
         );
@@ -127,7 +129,14 @@ export class OrderService {
         const updatedOrderData = updatedOrder[0];
 
 
-        return updatedOrderData;
+        return {
+            depositorId: updatedOrderData.depositor_id,
+            depositeeId: updatedOrderData.depositee_id,
+            package_id: updatedOrderData.package_id,
+            status: updatedOrderData.status,
+            payment_type: updatedOrderData.payment_type,
+            payment_amount: updatedOrderData.payment_amount
+        }
     }
 
     public async deleteOrder(orderId: number): Promise<Order[]> {

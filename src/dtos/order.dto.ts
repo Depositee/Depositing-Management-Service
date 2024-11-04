@@ -1,6 +1,7 @@
 import { IsString, IsNotEmpty, IsIn, IsOptional, IsInt } from 'class-validator';
 
 const orderValidStatus = ['placed', 'reserved', 'received', 'completed', 'canceled'];
+const paymentType = ['other', 'platform'];
 
 export class CreateOrderDto {
   @IsString()
@@ -17,6 +18,15 @@ export class CreateOrderDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsIn(paymentType)
+  public payment_type: string;
+
+  @IsInt()
+  @IsNotEmpty()
+  public payment_amount:number
+
+  @IsString()
+  @IsNotEmpty()
   public package_description: string;
 
   @IsInt()
@@ -30,8 +40,8 @@ export class UpdateOrderDto {
   public depositorId: string;
 
   @IsString()
-  @IsOptional()
-  public depositeeId?: string;
+  @IsNotEmpty()
+  public depositeeId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -42,6 +52,7 @@ export class UpdateOrderDto {
   @IsIn(orderValidStatus)
   public status: string;
 }
+
 export class UpdateOrderStatusDto {
   @IsString()
   @IsNotEmpty()

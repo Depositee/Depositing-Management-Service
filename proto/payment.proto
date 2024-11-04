@@ -1,0 +1,46 @@
+syntax ="proto3";
+
+import "google/protobuf/timestamp.proto";
+
+service PaymentService {
+    rpc GetAllPaymentByUserId(UserId) returns (PaymentList) {}
+    rpc MakePayment(Payment) returns (PaymentResponse) {}
+}
+
+service BalanceService {
+    rpc AddBalance(Balance) returns (Balance) {}
+    rpc GetBalanceByUserId(UserId) returns (Balance) {}
+}
+
+message Empty{}
+
+message UserId{
+    string id=1;
+}
+
+message Payment {
+    string senderId =1;
+    string receiverId =2;
+    int32 amount=3;
+    string currency=4;
+}
+
+message PaymentResponse{
+    int32 id=1;
+    string senderId =2;
+    string receiverId =3;
+    int32 amount=4;
+    string currency=5;
+    google.protobuf.Timestamp createdAt=6;
+    google.protobuf.Timestamp updatedAt=7;
+}
+
+message Balance{
+    string userId=1;
+    int32 balance=2;
+    string currency=3;
+}
+
+message PaymentList{
+    repeated Payment payments=1;
+}

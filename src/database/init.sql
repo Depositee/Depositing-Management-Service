@@ -18,6 +18,8 @@ CREATE TABLE orders (
     "depositor_id" VARCHAR(48) NOT NULL,
     "depositee_id" VARCHAR(48),
     "package_id" VARCHAR(48) NOT NULL,
+    "payment_type" VARCHAR(20) NOT NULL,
+    "payment_amount" DECIMAL(10, 2) NOT NULL,
     "status" VARCHAR(20) NOT NULL,
     "created_at" TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc'),
     "updated_at" TIMESTAMP WITHOUT TIME ZONE
