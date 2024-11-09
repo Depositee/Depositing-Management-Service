@@ -8,6 +8,9 @@ export interface Order {
     payment_amount:number
     created_at?: Date;
     updated_at?: Date;
+    package_name: string;
+    package_description: string; 
+    package_weight: number
   }
 
 export interface OrderStatus{

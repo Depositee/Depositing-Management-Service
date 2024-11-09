@@ -54,6 +54,9 @@ export class OrderController {
         depositorId: req.body.depositorId,
         payment_type: req.body.payment_type,
         payment_amount: req.body.payment_amount,
+        package_name : req.body.package_name, 
+        package_description : req.body.package_description, 
+        package_weight : req.body.package_weight,
         status: 'placed',
       }
       const packageData : Package = {
