@@ -34,6 +34,19 @@ export class OrderController {
     }
   };
 
+  // Get all orders by depositorId
+  public getOrderByDepositorId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const depositorId = req.params.depositorId;
+      console.log('depositorId',depositorId)
+      const orders: Order[] = await this.orderService.getAllOrdersByDepositorId(depositorId)
+
+      res.status(200).json({ data: orders, message: 'findByDepositorId' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   // Create a new order
   public createOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

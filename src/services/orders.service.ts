@@ -168,4 +168,22 @@ export class OrderService {
         );
         return deleteOrderData;
     }
+
+    public async getAllOrdersByDepositorId(targetDepositorId: string): Promise<Order[]> {
+        const { rows } = await pg.query(
+            `
+            SELECT
+                *
+            FROM
+                orders
+            WHERE
+                depositor_id = $1
+            `,
+            [targetDepositorId],
+        );
+
+        if (rows.length === 0) throw new HttpException(404, "No orders found for the specified depositor");
+
+        return rows;
+    }
 }
