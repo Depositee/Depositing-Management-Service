@@ -67,16 +67,42 @@ export class OrderService {
                     orders
                 WHERE
                     "id" = $1
-            )
+            ) AS exists
             `,
-            [orderId],
+            [orderId]
         );
+    
         if (!findOrder[0].exists) throw new HttpException(409, "Order doesn't exist");
-        
+
+        // Query to get the order details (status and depositee_id)
+    const { rows: orderDetails } = await pg.query(
+        `
+        SELECT
+            "status", "depositee_id"
+        FROM
+            orders
+        WHERE
+            "id" = $1
+        `,
+        [orderId]
+    );
+
+    // If order details not found, throw an error
+    if (orderDetails.length === 0) {
+        throw new HttpException(409, "Order details not found");
+    }
+
+    const { status: currentStatus, depositee_id } = orderDetails[0];
+    
         const { depositorId, depositeeId, package_id, package_name, package_description, package_weight, status } = orderData;
-        if ((findOrder[0].status === 'reserved' || findOrder[0].status === 'received' || findOrder[0].status === 'completed')
-            && findOrder[0].depositee_id !== depositeeId
-        ) throw new HttpException(401, "Order doesn't belong to you");
+        
+        if (
+            (currentStatus === 'reserved' || currentStatus === 'received' || currentStatus === 'completed') &&
+            depositee_id !== depositeeId
+        ) {
+            throw new HttpException(401, "Order doesn't belong to you");
+        }
+    
         const { rows: updateOrderData } = await pg.query(
             `
             UPDATE
@@ -91,15 +117,17 @@ export class OrderService {
                 "status" = $8
             WHERE
                 "id" = $1
-            RETURNING "depositor_id", "depositee_id", "package_id", "package_name", "package_description", "package_weight", "status"
+            RETURNING
+                "depositor_id", "depositee_id", "package_id", "package_name", "package_description", "package_weight", "status"
             `,
-            [orderId, depositorId, depositeeId, package_id, package_name, package_description, package_weight, status],
+            [orderId, depositorId, depositeeId, package_id, package_name, package_description, package_weight, status]
         );
-
+    
         await sendUpdateOrderStatusNotification(depositorId, depositeeId, package_id, status);
-
+    
         return updateOrderData;
     }
+    
 
     public async updateOrderStatus(orderId: number, status: string): Promise<Order> {
         const { rows: findOrder } = await pg.query(
