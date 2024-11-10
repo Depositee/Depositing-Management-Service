@@ -72,8 +72,11 @@ export class OrderService {
             [orderId],
         );
         if (!findOrder[0].exists) throw new HttpException(409, "Order doesn't exist");
-
+        
         const { depositorId, depositeeId, package_id, package_name, package_description, package_weight, status } = orderData;
+        if ((findOrder[0].status === 'reserved' || findOrder[0].status === 'received' || findOrder[0].status === 'completed')
+            && findOrder[0].depositee_id !== depositeeId
+        ) throw new HttpException(401, "Order doesn't belong to you");
         const { rows: updateOrderData } = await pg.query(
             `
             UPDATE
