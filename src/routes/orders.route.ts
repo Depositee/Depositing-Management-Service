@@ -17,6 +17,7 @@ export class OrderRoute implements Routes {
     this.router.get(`${this.path}`, this.order.getOrders);
     this.router.get(`${this.path}/:id(\\d+)`, this.order.getOrderById);
     this.router.get(`${this.path}/my/:depositorId`, this.order.getOrderByDepositorId);
+    this.router.get(`${this.path}/accept/:depositeeId`, this.order.getOrderByDepositeeId);
     this.router.post(`${this.path}`, ValidationMiddleware(CreateOrderDto), this.order.createOrder);
     this.router.put(`${this.path}/:id(\\d+)`, ValidationMiddleware(UpdateOrderDto, true), this.order.updateOrder);
     this.router.put(`${this.path}/:id(\\d+)/status`, ValidationMiddleware(UpdateOrderStatusDto, true), this.order.updateOrderStatus);

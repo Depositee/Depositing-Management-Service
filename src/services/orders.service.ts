@@ -220,4 +220,22 @@ export class OrderService {
 
         return rows;
     }
+
+    public async getAllOrdersByDepositeeId(targetDepositeeId: string): Promise<Order[]> {
+        const { rows } = await pg.query(
+            `
+            SELECT
+                *
+            FROM
+                orders
+            WHERE
+                depositee_id = $1
+            `,
+            [targetDepositeeId],
+        );
+
+        if (rows.length === 0) throw new HttpException(404, "No orders found for the specified depositee");
+
+        return rows;
+    }
 }
