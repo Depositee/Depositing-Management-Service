@@ -24,7 +24,6 @@ export const sendUpdateOrderStatusNotification = (
         case "completed":
             message = `Your order with package ID ${package_id} has been completed.`;
             sendNotification(depositor_id, package_id, message);
-            sendNotification(depositee_id, package_id, message);
             break;
         default:
             return;  
