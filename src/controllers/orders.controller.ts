@@ -107,6 +107,14 @@ export class OrderController {
       const packageData : Package = await this.packageService.getPackageById(packageId);
 
       const updatedPackage : Package = await this.packageService.updatePackageFromOrder(orderData,packageData);
+      if (orderData.status === 'completed' && orderData.payment_type === 'platform') {
+        await this.paymentService.makePayment({
+          senderId: orderData?.depositeeId,
+          receiverId: orderData.depositorId,
+          amount: Number(orderData.payment_amount),
+          currency: "THB"
+        });
+      }
 
       res.status(200).json({ data: updatedOrder, message: 'updated' });
     } catch (error) {
