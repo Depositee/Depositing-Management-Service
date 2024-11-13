@@ -109,8 +109,8 @@ export class OrderController {
       const updatedPackage : Package = await this.packageService.updatePackageFromOrder(orderData,packageData);
       if (orderData.status === 'completed' && orderData.payment_type === 'platform') {
         await this.paymentService.makePayment({
-          senderId: orderData?.depositeeId,
-          receiverId: orderData.depositorId,
+          senderId: orderData?.depositorId,
+          receiverId: orderData?.depositeeId,
           amount: Number(orderData.payment_amount),
           currency: "THB"
         });
